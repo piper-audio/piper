@@ -1,0 +1,2 @@
+{"basic": {"description": "Energy rise within a frequency bin necessary to count toward broadband total", "identifier": "threshold", "name": "Energy rise threshold"}, "defaultValue": 3, "maxValue": 20.5, "minValue": 0, "unit": "dB", "valueNames": []}
+
