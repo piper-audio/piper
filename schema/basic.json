@@ -4,9 +4,16 @@
     "description": "schema for the basic part of various Vamp descriptors",
     "type": "object",
     "properties": {
-	"identifier": { "type": "string" },
-	"name": { "type": "string" },
-	"description": { "type": "string" }
+	"identifier": {
+	    "type": "string",
+	    "pattern": "^[a-zA-Z0-9_-]+$"
+	},
+	"name": {
+	    "type": "string"
+	},
+	"description": {
+	    "type": "string"
+	}
     },
     "required": [ "identifier" ],
     "additionalProperties": false
