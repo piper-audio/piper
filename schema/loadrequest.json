@@ -11,7 +11,10 @@
 	    "type": "number"
 	},
 	"adapterFlags": {
-	    "$ref": "http://vamp-plugins.org/json/schema/enums#/definitions/adapter_flags"
+	    "type": "array",
+	    "items": {
+		"$ref": "http://vamp-plugins.org/json/schema/enums#/definitions/adapter_flags"
+	    }
 	}
     },
     "required": [ "key", "inputSampleRate" ],
