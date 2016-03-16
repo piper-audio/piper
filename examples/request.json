@@ -1,0 +1,2 @@
+{"verb": "load", "content": {"key":"vamp-example-plugins:percussiononsets","inputSampleRate":44100,"adapterFlags":["AdaptInputDomain","AdaptBufferSize"]}}
+
