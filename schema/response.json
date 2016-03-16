@@ -1,0 +1,20 @@
+{
+    "id": "http://vamp-plugins.org/json/schema/response#",
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "description": "schema for a success or failure response to a request",
+    "type": "object",
+    "properties": {
+	"success": {
+	    "type": "boolean"
+	},
+	"response": {
+	    "type": "object"
+	},
+	"errorText": {
+	    "type": "string"
+	}
+    },
+    "required": [ "success" ],
+    "additionalProperties": false
+}
+

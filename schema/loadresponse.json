@@ -12,9 +12,6 @@
 	},
 	"defaultConfiguration": {
 	    "$ref": "http://vamp-plugins.org/json/schema/pluginconfiguration#"
-	},
-	"errorText": {
-	    "type": "string"
 	}
     },
     "required": [ ],
