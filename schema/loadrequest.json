@@ -4,7 +4,7 @@
     "description": "schema for a serialised load request for a Vamp Plugin; normally served as the content field of an object matching the plain request schema",
     "type": "object",
     "properties": {
-	"key": {
+	"pluginKey": {
 	    "type": "string"
 	},
 	"inputSampleRate": {
@@ -17,7 +17,7 @@
 	    }
 	}
     },
-    "required": [ "key", "inputSampleRate" ],
+    "required": [ "pluginKey", "inputSampleRate" ],
     "additionalProperties": false
 }
 

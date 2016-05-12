@@ -4,7 +4,7 @@
     "description": "schema for a serialised bundle of the static data associated with a Vamp Plugin",
     "type": "object",
     "properties": {
-	"key": {
+	"pluginKey": {
 	    "type": "string"
 	},
 	"basic": {
@@ -16,7 +16,7 @@
 	"copyright": {
 	    "type": "string"
 	},
-	"version": {
+	"pluginVersion": {
 	    "type": "integer"
 	},
 	"category": {
@@ -45,7 +45,7 @@
 	    "items": { "$ref": "http://vamp-plugins.org/json/schema/basic#" }
 	}
     },
-    "required": [ "key", "basic", "version",
+    "required": [ "pluginKey", "basic", "pluginVersion",
 		  "minChannelCount", "maxChannelCount",
 		  "inputDomain", "basicOutputInfo" ],
     "additionalProperties": false
