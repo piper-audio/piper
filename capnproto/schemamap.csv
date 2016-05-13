@@ -1,0 +1,16 @@
+basic,
+configurationrequest,
+configurationresponse,
+feature,Feature
+featureset,FeatureSet
+loadrequest,LoadRequest
+loadresponse,LoadResponse
+outputdescriptor,OutputDescriptor
+parameterdescriptor,ParameterDescriptor
+pluginconfiguration,PluginConfiguration
+pluginstaticdata,PluginStaticData
+processblock,
+realtime,RealTime
+request,
+response,
+valueextents,
