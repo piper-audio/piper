@@ -135,11 +135,18 @@ struct ConfigurationResponse {
     outputs            @0  :List(OutputDescriptor);
 }
 
+struct ProcessRequest {
+    pluginHandle       @0  :Int64;
+    timestamp          @1  :RealTime;
+    input              @2  :List(List(Float32));
+}
+
 struct VampRequest {
     request :union {
 	list           @0  :Void;
 	load           @1  :LoadRequest;
 	configure      @2  :ConfigurationRequest;
+	process        @3  :ProcessRequest;
     }
 }
 
@@ -150,6 +157,7 @@ struct VampResponse {
 	list           @2  :List(PluginStaticData);
 	load           @3  :LoadResponse;
 	configure      @4  :ConfigurationResponse;
+	process        @5  :FeatureSet;
     }
 }
 
