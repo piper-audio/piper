@@ -147,6 +147,7 @@ struct VampRequest {
 	load           @1  :LoadRequest;
 	configure      @2  :ConfigurationRequest;
 	process        @3  :ProcessRequest;
+	finish         @4  :Void;        # getRemainingFeatures and unload plugin
     }
 }
 
@@ -158,6 +159,7 @@ struct VampResponse {
 	load           @3  :LoadResponse;
 	configure      @4  :ConfigurationResponse;
 	process        @5  :FeatureSet;
+	finish         @6  :FeatureSet;
     }
 }
 
