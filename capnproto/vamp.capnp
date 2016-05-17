@@ -121,13 +121,13 @@ struct LoadRequest {
 }
 
 struct LoadResponse {
-    pluginHandle       @0  :Int64;
+    pluginHandle       @0  :Int32;
     staticData         @1  :PluginStaticData;
     defaultConfiguration @2  :PluginConfiguration;
 }
 
 struct ConfigurationRequest {
-    pluginHandle       @0  :Int64;
+    pluginHandle       @0  :Int32;
     configuration      @1  :PluginConfiguration;
 }
 
@@ -136,7 +136,7 @@ struct ConfigurationResponse {
 }
 
 struct ProcessRequest {
-    pluginHandle       @0  :Int64;
+    pluginHandle       @0  :Int32;
     timestamp          @1  :RealTime;
     input              @2  :List(List(Float32));
 }
