@@ -11,7 +11,7 @@
 	    "$ref": "http://vamp-plugins.org/json/schema/processinput#"
 	}
     },
-    "required": [ "pluginHandle", "processBlock" ],
+    "required": [ "pluginHandle", "processInput" ],
     "additionalProperties": false
 }
 
