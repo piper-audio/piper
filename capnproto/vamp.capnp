@@ -137,8 +137,7 @@ struct ConfigurationResponse {
 
 struct ProcessRequest {
     pluginHandle       @0  :Int32;
-    timestamp          @1  :RealTime;
-    input              @2  :List(List(Float32));
+    input              @1  :ProcessInput;
 }
 
 struct VampRequest {
