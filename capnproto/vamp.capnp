@@ -140,6 +140,10 @@ struct ProcessRequest {
     input              @1  :ProcessInput;
 }
 
+struct ProcessResponse {
+    features           @0  :FeatureSet;
+}
+
 struct VampRequest {
     request :union {
 	list           @0  :Void;
@@ -157,8 +161,8 @@ struct VampResponse {
 	list           @2  :List(PluginStaticData);
 	load           @3  :LoadResponse;
 	configure      @4  :ConfigurationResponse;
-	process        @5  :FeatureSet;
-	finish         @6  :FeatureSet;
+	process        @5  :ProcessResponse;
+	finish         @6  :ProcessResponse;
     }
 }
 
