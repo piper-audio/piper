@@ -7,7 +7,7 @@
 	"timestamp": {
 	    "$ref": "http://vamp-plugins.org/json/schema/realtime#"
 	},
-	"input": {
+	"inputBuffers": {
 	    "type": "array",
 	    "items": {
 		"type": "object",

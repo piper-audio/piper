@@ -7,8 +7,8 @@
 	"pluginHandle": {
 	    "type": "number"
 	},
-	"processBlock": {
-	    "$ref": "http://vamp-plugins.org/json/schema/processblock#"
+	"processInput": {
+	    "$ref": "http://vamp-plugins.org/json/schema/processinput#"
 	}
     },
     "required": [ "pluginHandle", "processBlock" ],
