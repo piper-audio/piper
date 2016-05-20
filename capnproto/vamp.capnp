@@ -140,6 +140,10 @@ struct ProcessRequest {
     input              @1  :ProcessInput;
 }
 
+struct FinishRequest {
+    pluginHandle       @0  :Int32;
+}
+
 struct ProcessResponse {
     features           @0  :FeatureSet;
 }
@@ -150,7 +154,7 @@ struct VampRequest {
 	load           @1  :LoadRequest;
 	configure      @2  :ConfigurationRequest;
 	process        @3  :ProcessRequest;
-	finish         @4  :Void;        # getRemainingFeatures and unload plugin
+	finish         @4  :FinishRequest;     # getRemainingFeatures and unload
     }
 }
 
