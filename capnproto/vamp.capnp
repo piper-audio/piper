@@ -114,6 +114,10 @@ struct PluginConfiguration {
     blockSize          @4  :Int32;
 }
 
+struct ListResponse {
+    plugins            @0  :List(PluginStaticData);    
+}
+
 struct LoadRequest {
     pluginKey          @0  :Text;
     inputSampleRate    @1  :Float32;
@@ -162,7 +166,7 @@ struct VampResponse {
     success            @0  :Bool;
     errorText          @1  :Text = "";
     response :union {
-	list           @2  :List(PluginStaticData);
+	list           @2  :ListResponse;
 	load           @3  :LoadResponse;
 	configure      @4  :ConfigurationResponse;
 	process        @5  :ProcessResponse;
