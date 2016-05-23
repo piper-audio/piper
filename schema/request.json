@@ -4,14 +4,14 @@
     "description": "schema for a simple serialised request",
     "type": "object",
     "properties": {
-	"verb": {
+	"type": {
 	    "type": "string"
 	},
 	"content": {
 	    "type": "object"
 	}
     },
-    "required": [ "verb" ],
+    "required": [ "type" ],
     "additionalProperties": false
 }
 
