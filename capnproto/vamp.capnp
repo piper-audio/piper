@@ -136,6 +136,7 @@ struct ConfigurationRequest {
 }
 
 struct ConfigurationResponse {
+#!!! now the only response type not to have the pluginHandle, so maybe it should, just for completeness
     outputs            @0  :List(OutputDescriptor);
 }
 
