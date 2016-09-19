@@ -96,7 +96,7 @@ struct Feature {
 
 struct FeatureSet {
     struct FSPair {
-        output         @0  :Int32;
+        output         @0  :Text;
         features       @1  :List(Feature) = [];
     }
     featurePairs       @0  :List(FSPair);
@@ -136,7 +136,8 @@ struct ConfigurationRequest {
 }
 
 struct ConfigurationResponse {
-    outputs            @0  :List(OutputDescriptor);
+    pluginHandle       @0  :Int32;
+    outputs            @1  :List(OutputDescriptor);
 }
 
 struct ProcessRequest {
@@ -144,12 +145,13 @@ struct ProcessRequest {
     input              @1  :ProcessInput;
 }
 
-struct FinishRequest {
+struct ProcessResponse {
     pluginHandle       @0  :Int32;
+    features           @1  :FeatureSet;
 }
 
-struct ProcessResponse {
-    features           @0  :FeatureSet;
+struct FinishRequest {
+    pluginHandle       @0  :Int32;
 }
 
 struct VampRequest {
