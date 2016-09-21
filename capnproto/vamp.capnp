@@ -142,7 +142,7 @@ struct ConfigurationResponse {
 
 struct ProcessRequest {
     pluginHandle       @0  :Int32;
-    input              @1  :ProcessInput;
+    processInput       @1  :ProcessInput;
 }
 
 struct ProcessResponse {
