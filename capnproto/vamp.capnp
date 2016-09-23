@@ -49,20 +49,24 @@ struct ParameterDescriptor {
     valueNames         @7  :List(Text)  = [];
 }
 
+struct ConfiguredOutputDescriptor {
+    unit               @0  :Text;
+    hasFixedBinCount   @1  :Bool        = false;
+    binCount           @2  :Int32       = 0;
+    binNames           @3  :List(Text)  = [];
+    hasKnownExtents    @4  :Bool        = false;
+    minValue           @5  :Float32     = 0.0;
+    maxValue           @6  :Float32     = 0.0;
+    isQuantized        @7  :Bool        = false;
+    quantizeStep       @8  :Float32     = 0.0;
+    sampleType         @9  :SampleType;
+    sampleRate         @10 :Float32     = 0.0;
+    hasDuration        @11 :Bool        = false;
+}
+
 struct OutputDescriptor {
     basic              @0  :Basic;
-    unit               @1  :Text;
-    hasFixedBinCount   @2  :Bool        = false;
-    binCount           @3  :Int32       = 0;
-    binNames           @4  :List(Text)  = [];
-    hasKnownExtents    @5  :Bool        = false;
-    minValue           @6  :Float32     = 0.0;
-    maxValue           @7  :Float32     = 0.0;
-    isQuantized        @8  :Bool        = false;
-    quantizeStep       @9  :Float32     = 0.0;
-    sampleType         @10 :SampleType;
-    sampleRate         @11 :Float32     = 0.0;
-    hasDuration        @12 :Bool        = false;
+    configured         @1  :ConfiguredOutputDescriptor;
 }
 
 struct PluginStaticData {
