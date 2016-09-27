@@ -1,1 +1,1 @@
-{"pluginHandle":12345,"processInput":{"inputBuffers":[{"b64values": "AACAPwAAAEAEAEBAAACAQAAAoEAAAMBAAADQQAAA4EA"}], "timestamp": {"n": 141590000, "s": 3}}}
+{"pluginHandle":12345,"processInput":{"inputBuffers":["AACAPwAAAEAEAEBAAACAQAAAoEAAAMBAAADQQAAA4EA"], "timestamp": {"n": 141590000, "s": 3}}}
