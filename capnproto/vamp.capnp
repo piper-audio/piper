@@ -95,7 +95,7 @@ struct Feature {
     hasDuration        @2  :Bool        = false;
     duration           @3  :RealTime;
     label              @4  :Text;
-    values             @5  :List(Float32) = [];
+    featureValues      @5  :List(Float32) = [];
 }
 
 struct FeatureSet {
