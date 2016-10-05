@@ -27,7 +27,10 @@
 		},
                 {
 		    "type": "string",
-                    "pattern": "^[a-zA-Z0-9+/]*=*$"
+                    "media": {
+                        "binaryEncoding": "base64",
+                        "type": "application/octet-stream"
+                    },
 		}
             ]
         }

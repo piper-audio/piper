@@ -18,14 +18,17 @@
     "definitions": {
         "serialisedArray": {
             "anyOf": [
-                    {
-			"type": "array",
-			"items": { "type": "number" }
-		    },
-                    {
-		        "type": "string",
-                        "pattern": "^[a-zA-Z0-9+/]*=*$"
-		    }
+                {
+		    "type": "array",
+		    "items": { "type": "number" }
+		},
+                {
+		    "type": "string",
+                    "media": {
+                        "binaryEncoding": "base64",
+                        "type": "application/octet-stream"
+                    }
+		}
             ]
         }
     }
