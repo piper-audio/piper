@@ -9,6 +9,7 @@
 	},
 	"params": {
             "anyOf": [
+                { "$ref": "http://vamp-plugins.org/json/schema/listrequest#" },
                 { "$ref": "http://vamp-plugins.org/json/schema/loadrequest#" },
                 { "$ref": "http://vamp-plugins.org/json/schema/configurationrequest#" },
                 { "$ref": "http://vamp-plugins.org/json/schema/processrequest#" },
