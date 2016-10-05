@@ -5,6 +5,9 @@
     "type": "object",
     "oneOf": [ {
         "properties": {
+	    "method": {
+	        "type": "string"
+	    },
 	    "result": {
                 "anyOf": [
                     { "$ref": "http://vamp-plugins.org/json/schema/listresponse#" },
@@ -24,10 +27,13 @@
                 "type": "string"
             }
         },
-        "required": [ "result" ],
+        "required": [ "method", "result" ],
         "additionalProperties": false
     }, {
         "properties": {
+	    "method": {
+	        "type": "string"
+	    },
 	    "error": {
                 "$ref": "http://vamp-plugins.org/json/schema/error#"
 	    },
@@ -41,7 +47,7 @@
                 "type": "string"
             }
         },
-        "required": [ "error" ],
+        "required": [ "method", "error" ],
         "additionalProperties": false
     } ]
 }

@@ -1,1 +1,1 @@
-{"error": {"code": 6, "message": "An error occurred!" },"id": "6"}
+{"method": "process", "error": {"code": 6, "message": "An error occurred!" },"id": "6"}
