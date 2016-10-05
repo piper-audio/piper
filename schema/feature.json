@@ -14,6 +14,12 @@
 	    "type": "string"
 	},
 	"featureValues": {
+            "$ref": "#/definitions/serialisedArray"
+	}
+    },
+    "additionalProperties": false,
+    "definitions": {
+        "serialisedArray": {
             "anyOf": [
                 {
 		    "type": "array",
@@ -24,9 +30,8 @@
                     "pattern": "^[a-zA-Z0-9+/]*=*$"
 		}
             ]
-	}
-    },
-    "additionalProperties": false
+        }
+    }
 }
 
 	

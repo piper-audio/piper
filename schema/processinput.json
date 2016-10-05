@@ -10,7 +10,14 @@
 	"inputBuffers": {
 	    "type": "array",
 	    "items": {
-                "anyOf": [
+                "$ref": "#/definitions/serialisedArray"
+            }
+        }
+    },
+    "additionalProperties": false,
+    "definitions": {
+        "serialisedArray": {
+            "anyOf": [
                     {
 			"type": "array",
 			"items": { "type": "number" }
@@ -19,11 +26,9 @@
 		        "type": "string",
                         "pattern": "^[a-zA-Z0-9+/]*=*$"
 		    }
-                ]
-	    }
-	}
-    },
-    "additionalProperties": false
+            ]
+        }
+    }
 }
 
 	
