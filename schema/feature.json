@@ -14,27 +14,10 @@
 	    "type": "string"
 	},
 	"featureValues": {
-            "$ref": "#/definitions/serialisedArray"
+            "$ref": "http://vamp-plugins.org/json/schema/serialisedarray#"
 	}
     },
-    "additionalProperties": false,
-    "definitions": {
-        "serialisedArray": {
-            "anyOf": [
-                {
-		    "type": "array",
-		    "items": { "type": "number" }
-		},
-                {
-		    "type": "string",
-                    "media": {
-                        "binaryEncoding": "base64",
-                        "type": "application/octet-stream"
-                    },
-		}
-            ]
-        }
-    }
+    "additionalProperties": false
 }
 
 	
