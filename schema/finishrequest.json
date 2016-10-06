@@ -4,10 +4,10 @@
     "description": "schema for a serialised request to finish processing with a feature extractor; may be served in the params field of a finish-method rpcrequest",
     "type": "object",
     "properties": {
-	"pluginHandle": {
+	"handle": {
 	    "type": "number"
 	}
     },
-    "required": [ "pluginHandle" ],
+    "required": [ "handle" ],
     "additionalProperties": false
 }
