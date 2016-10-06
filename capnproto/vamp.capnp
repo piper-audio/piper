@@ -69,12 +69,12 @@ struct OutputDescriptor {
     configured         @1  :ConfiguredOutputDescriptor;
 }
 
-struct PluginStaticData {
-    pluginKey          @0  :Text;
+struct ExtractorStaticData {
+    key                @0  :Text;
     basic              @1  :Basic;
     maker              @2  :Text;
     copyright          @3  :Text;
-    pluginVersion      @4  :Int32;
+    version            @4  :Int32;
     category           @5  :List(Text);
     minChannelCount    @6  :Int32;
     maxChannelCount    @7  :Int32;
@@ -106,7 +106,7 @@ struct FeatureSet {
     featurePairs       @0  :List(FSPair);
 }
 
-struct PluginConfiguration {
+struct Configuration {
     struct PVPair {
         parameter      @0  :Text;
         value          @1  :Float32;
@@ -118,49 +118,57 @@ struct PluginConfiguration {
     blockSize          @4  :Int32;
 }
 
+struct ListRequest {
+}
+
 struct ListResponse {
-    plugins            @0  :List(PluginStaticData);    
+    available          @0  :List(ExtractorStaticData);    
 }
 
 struct LoadRequest {
-    pluginKey          @0  :Text;
+    key                @0  :Text;
     inputSampleRate    @1  :Float32;
     adapterFlags       @2  :List(AdapterFlag);
 }
 
 struct LoadResponse {
-    pluginHandle       @0  :Int32;
-    staticData         @1  :PluginStaticData;
-    defaultConfiguration @2  :PluginConfiguration;
+    handle             @0  :Int32;
+    staticData         @1  :ExtractorStaticData;
+    defaultConfiguration @2  :Configuration;
 }
 
 struct ConfigurationRequest {
-    pluginHandle       @0  :Int32;
-    configuration      @1  :PluginConfiguration;
+    handle             @0  :Int32;
+    configuration      @1  :Configuration;
 }
 
 struct ConfigurationResponse {
-    pluginHandle       @0  :Int32;
+    handle             @0  :Int32;
     outputs            @1  :List(OutputDescriptor);
 }
 
 struct ProcessRequest {
-    pluginHandle       @0  :Int32;
+    handle             @0  :Int32;
     processInput       @1  :ProcessInput;
 }
 
 struct ProcessResponse {
-    pluginHandle       @0  :Int32;
+    handle             @0  :Int32;
     features           @1  :FeatureSet;
 }
 
 struct FinishRequest {
-    pluginHandle       @0  :Int32;
+    handle             @0  :Int32;
 }
 
-struct VampRequest {
+struct Error {
+    code               @0  :Int32;
+    message            @1  :Text;
+}
+
+struct RpcRequest {
     request :union {
-	list           @0  :Void;
+	list           @0  :ListRequest;
 	load           @1  :LoadRequest;
 	configure      @2  :ConfigurationRequest;
 	process        @3  :ProcessRequest;
@@ -168,15 +176,14 @@ struct VampRequest {
     }
 }
 
-struct VampResponse {
-    success            @0  :Bool;
-    errorText          @1  :Text = "";
+struct RpcResponse {
     response :union {
-	list           @2  :ListResponse;
-	load           @3  :LoadResponse;
-	configure      @4  :ConfigurationResponse;
-	process        @5  :ProcessResponse;
-	finish         @6  :ProcessResponse;
+        error          @0  :Error;
+	list           @1  :ListResponse;
+	load           @2  :LoadResponse;
+	configure      @3  :ConfigurationResponse;
+	process        @4  :ProcessResponse;
+	finish         @5  :ProcessResponse;
     }
 }
 
