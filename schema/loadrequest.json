@@ -4,7 +4,7 @@
     "description": "schema for a request to load a feature extractor; may be served in the params field of a load-method rpcrequest",
     "type": "object",
     "properties": {
-	"pluginKey": {
+	"key": {
 	    "type": "string"
 	},
 	"inputSampleRate": {
@@ -17,7 +17,7 @@
 	    }
 	}
     },
-    "required": [ "pluginKey", "inputSampleRate" ],
+    "required": [ "key", "inputSampleRate" ],
     "additionalProperties": false
 }
 
