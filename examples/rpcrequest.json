@@ -1,0 +1,2 @@
+{"method": "load", "params": {"pluginKey":"vamp-example-plugins:percussiononsets","inputSampleRate":44100,"adapterFlags":["AdaptInputDomain","AdaptBufferSize"]}, "id": 6, "jsonrpc": "2.0"}
+

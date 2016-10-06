@@ -1,7 +1,7 @@
 {
     "id": "http://vamp-plugins.org/json/schema/pluginstaticdata#",
     "$schema": "http://json-schema.org/draft-04/schema#",
-    "description": "schema for a serialised bundle of the static data associated with a Vamp Plugin",
+    "description": "schema for the static metadata associated with a feature extractor",
     "type": "object",
     "properties": {
 	"pluginKey": {
