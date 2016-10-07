@@ -4,34 +4,6 @@
 using Cxx = import "/capnp/c++.capnp";
 $Cxx.namespace("piper");
 
-enum InputDomain {
-    timeDomain         @0;
-    frequencyDomain    @1;
-}
-
-enum SampleType {
-    oneSamplePerStep   @0;
-    fixedSampleRate    @1;
-    variableSampleRate @2;
-}
-
-enum AdapterFlag {
-    adaptInputDomain   @0;
-    adaptChannelCount  @1;
-    adaptBufferSize    @2;
-}
-
-const adaptAllSafe :List(AdapterFlag) =
-      [ adaptInputDomain, adaptChannelCount ];
-
-const adaptAll :List(AdapterFlag) =
-      [ adaptInputDomain, adaptChannelCount, adaptBufferSize ];
-
-struct RealTime {
-    sec                @0  :Int32       = 0;
-    nsec               @1  :Int32       = 0;
-}
-
 struct Basic {
     identifier         @0  :Text;
     name               @1  :Text;
@@ -47,6 +19,12 @@ struct ParameterDescriptor {
     isQuantized        @5  :Bool        = false;
     quantizeStep       @6  :Float32     = 0.0;
     valueNames         @7  :List(Text)  = [];
+}
+
+enum SampleType {
+    oneSamplePerStep   @0;
+    fixedSampleRate    @1;
+    variableSampleRate @2;
 }
 
 struct ConfiguredOutputDescriptor {
@@ -69,6 +47,11 @@ struct OutputDescriptor {
     configured         @1  :ConfiguredOutputDescriptor;
 }
 
+enum InputDomain {
+    timeDomain         @0;
+    frequencyDomain    @1;
+}
+
 struct ExtractorStaticData {
     key                @0  :Text;
     basic              @1  :Basic;
@@ -82,6 +65,11 @@ struct ExtractorStaticData {
     programs           @9  :List(Text);
     inputDomain        @10 :InputDomain;
     basicOutputInfo    @11 :List(Basic);
+}
+
+struct RealTime {
+    sec                @0  :Int32       = 0;
+    nsec               @1  :Int32       = 0;
 }
 
 struct ProcessInput {
@@ -117,6 +105,18 @@ struct Configuration {
     stepSize           @3  :Int32;
     blockSize          @4  :Int32;
 }
+
+enum AdapterFlag {
+    adaptInputDomain   @0;
+    adaptChannelCount  @1;
+    adaptBufferSize    @2;
+}
+
+const adaptAllSafe :List(AdapterFlag) =
+      [ adaptInputDomain, adaptChannelCount ];
+
+const adaptAll :List(AdapterFlag) =
+      [ adaptInputDomain, adaptChannelCount, adaptBufferSize ];
 
 struct ListRequest {
 }
@@ -173,7 +173,7 @@ struct Error {
 
 struct RpcRequest {
     # Request bundle for use when using Cap'n Proto serialisation without
-    # Cap'n Proto RPC layer.
+    # Cap'n Proto RPC layer. For Cap'n Proto RPC, see piper.rpc.capnp.
     request :union {
 	list           @0  :ListRequest;
 	load           @1  :LoadRequest;
@@ -185,7 +185,7 @@ struct RpcRequest {
 
 struct RpcResponse {
     # Response bundle for use when using Cap'n Proto serialisation without
-    # Cap'n Proto RPC layer.
+    # Cap'n Proto RPC layer. For Cap'n Proto RPC, see piper.rpc.capnp.
     response :union {
         error          @0  :Error;
 	list           @1  :ListResponse;

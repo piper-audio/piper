@@ -7,10 +7,10 @@ using P = import "piper.capnp";
 
 interface Piper {
     # RPC interface for use when using Cap'n Proto RPC layer.
-    list               @0 (req :P.ListRequest) -> (resp :P.ListResponse);
-    load               @1 (req :P.LoadRequest) -> (resp :P.LoadResponse);
-    configure          @2 (req :P.ConfigurationRequest) -> (resp :P.ConfigurationResponse);
-    process            @3 (req :P.ProcessRequest) -> (resp :P.ProcessResponse);
-    finish             @4 (req :P.FinishRequest) -> (resp :P.FinishResponse);
+    list       @0 (listRequest :P.ListRequest) -> (listResponse :P.ListResponse);
+    load       @1 (loadRequest :P.LoadRequest) -> (loadResponse :P.LoadResponse);
+    configure  @2 (configurationRequest :P.ConfigurationRequest) -> (configurationResponse :P.ConfigurationResponse);
+    process    @3 (processRequest :P.ProcessRequest) -> (processResponse :P.ProcessResponse);
+    finish     @4 (finishRequest :P.FinishRequest) -> (finishResponse :P.FinishResponse);
 }
 
