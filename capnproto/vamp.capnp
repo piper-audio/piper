@@ -161,12 +161,19 @@ struct FinishRequest {
     handle             @0  :Int32;
 }
 
+struct FinishResponse {
+    handle             @0  :Int32;
+    features           @1  :FeatureSet;
+}
+
 struct Error {
     code               @0  :Int32;
     message            @1  :Text;
 }
 
 struct RpcRequest {
+    # Request bundle for use when using Cap'n Proto serialisation without
+    # Cap'n Proto RPC layer.
     request :union {
 	list           @0  :ListRequest;
 	load           @1  :LoadRequest;
@@ -177,13 +184,15 @@ struct RpcRequest {
 }
 
 struct RpcResponse {
+    # Response bundle for use when using Cap'n Proto serialisation without
+    # Cap'n Proto RPC layer.
     response :union {
         error          @0  :Error;
 	list           @1  :ListResponse;
 	load           @2  :LoadResponse;
 	configure      @3  :ConfigurationResponse;
 	process        @4  :ProcessResponse;
-	finish         @5  :ProcessResponse;
+	finish         @5  :FinishResponse;
     }
 }
 
