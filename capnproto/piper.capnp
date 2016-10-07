@@ -2,7 +2,7 @@
 @0xc4b1c6c44c999206;
 
 using Cxx = import "/capnp/c++.capnp";
-$Cxx.namespace("vampipe");
+$Cxx.namespace("piper");
 
 enum InputDomain {
     timeDomain         @0;
