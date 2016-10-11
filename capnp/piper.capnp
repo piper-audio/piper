@@ -174,25 +174,35 @@ struct Error {
 struct RpcRequest {
     # Request bundle for use when using Cap'n Proto serialisation without
     # Cap'n Proto RPC layer. For Cap'n Proto RPC, see piper.rpc.capnp.
+    id :union {
+        number         @0  :Int32;
+        tag            @1  :Text;
+        none           @2  :Void;
+    }
     request :union {
-	list           @0  :ListRequest;
-	load           @1  :LoadRequest;
-	configure      @2  :ConfigurationRequest;
-	process        @3  :ProcessRequest;
-	finish         @4  :FinishRequest;     # getRemainingFeatures and unload
+	list           @3  :ListRequest;
+	load           @4  :LoadRequest;
+	configure      @5  :ConfigurationRequest;
+	process        @6  :ProcessRequest;
+	finish         @7  :FinishRequest;     # getRemainingFeatures and unload
     }
 }
 
 struct RpcResponse {
     # Response bundle for use when using Cap'n Proto serialisation without
     # Cap'n Proto RPC layer. For Cap'n Proto RPC, see piper.rpc.capnp.
+    id :union {
+        number         @0  :Int32;
+        tag            @1  :Text;
+        none           @2  :Void;
+    }
     response :union {
-        error          @0  :Error;
-	list           @1  :ListResponse;
-	load           @2  :LoadResponse;
-	configure      @3  :ConfigurationResponse;
-	process        @4  :ProcessResponse;
-	finish         @5  :FinishResponse;
+        error          @3  :Error;
+	list           @4  :ListResponse;
+	load           @5  :LoadResponse;
+	configure      @6  :ConfigurationResponse;
+	process        @7  :ProcessResponse;
+	finish         @8  :FinishResponse;
     }
 }
 
