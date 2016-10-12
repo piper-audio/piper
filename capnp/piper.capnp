@@ -184,7 +184,11 @@ struct RpcRequest {
 	load           @4  :LoadRequest;
 	configure      @5  :ConfigurationRequest;
 	process        @6  :ProcessRequest;
-	finish         @7  :FinishRequest;     # getRemainingFeatures and unload
+	finish         @7  :FinishRequest;
+        # finish gets any remaining calculated features and unloads
+        # the feature extractor. Note that you can call finish at any
+        # time -- even if you haven't configured or used the extractor,
+        # it will unload any resources used and abandon the handle.
     }
 }
 
