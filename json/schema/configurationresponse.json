@@ -1,5 +1,5 @@
 {
-    "id": "http://vamp-plugins.org/json/schema/configurationresponse#",
+    "id": "http://vamp-plugins.org/piper/json/schema/configurationresponse#",
     "$schema": "http://json-schema.org/draft-04/schema#",
     "description": "schema for a successful response to a request to configure a feature extractor; may be served in the result field of a configure-method rpcresponse",
     "type": "object",
@@ -9,7 +9,7 @@
 	},
 	"outputList": {
 	    "type": "array",
-	    "items": { "$ref": "http://vamp-plugins.org/json/schema/outputdescriptor#" }
+	    "items": { "$ref": "http://vamp-plugins.org/piper/json/schema/outputdescriptor#" }
 	}
     },
     "required": [ "handle", "outputList" ],
