@@ -4,6 +4,11 @@
     "description": "schema for a list request for feature extractors; may be served in the params field of a list-method rpcrequest",
     "type": "object",
     "properties": {
+        "from": {
+            "type": "array",
+            "items": { "type": "string" }
+        }
     },
+    "required": [],
     "additionalProperties": false
 }
