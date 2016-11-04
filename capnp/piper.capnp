@@ -119,6 +119,7 @@ const adaptAll :List(AdapterFlag) =
       [ adaptInputDomain, adaptChannelCount, adaptBufferSize ];
 
 struct ListRequest {
+    from               @0  :List(Text);
 }
 
 struct ListResponse {
