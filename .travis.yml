@@ -1,0 +1,17 @@
+language: python
+
+os:
+  - linux
+  - osx
+
+before_install:
+  - ( cd ../ ; git clone https://github.com/sandstorm-io/capnproto )
+  - ( cd ../capnproto/c++ ; ./setup-autotools.sh && autoreconf -i )
+  - ( cd ../capnproto/c++ ; ./configure && make && make install )
+
+install:
+  - sudo pip install jsonschema
+
+script:
+  - ./check.sh
+
