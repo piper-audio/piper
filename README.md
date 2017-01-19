@@ -25,13 +25,13 @@ API is transport-independent. We provide initial implementations using
 JSON in Javascript and C++, and using Cap'n Proto in C++.
 
 This repository contains the basic Piper schema. Implementations and
-utilities can be found in related repositories.
+utilities can be found in neighbouring repositories.
 
 ## Authors and licensing
 
 Piper was made by Lucas Thompson and Chris Cannam at the Centre for
 Digital Music, Queen Mary, University of London.
 
-Copyright (c) 2015-2016 Queen Mary, University of London, provided
+Copyright (c) 2015-2017 Queen Mary, University of London, provided
 under a BSD-style licence. See the file COPYING for details.
 
