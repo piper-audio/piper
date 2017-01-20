@@ -27,6 +27,8 @@ JSON in Javascript and C++, and using Cap'n Proto in C++.
 This repository contains the basic Piper schema. Implementations and
 utilities can be found in neighbouring repositories.
 
+[![Build Status](https://travis-ci.org/piper-audio/piper.svg?branch=master)](https://travis-ci.org/piper-audio/piper)
+
 ## Authors and licensing
 
 Piper was made by Lucas Thompson and Chris Cannam at the Centre for
