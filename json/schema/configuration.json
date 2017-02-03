@@ -19,14 +19,11 @@
 	"channelCount": {
 	    "type": "integer"
 	},
-	"stepSize": {
-	    "type": "integer"
-	},
-	"blockSize": {
-	    "type": "integer"
-	}
+        "framing": {
+	    "$ref": "http://vamp-plugins.org/piper/json/schema/framing#"
+        }
     },
-    "required": [ "channelCount", "stepSize", "blockSize" ],
+    "required": [ "channelCount", "framing" ],
     "additionalProperties": false
 }
 

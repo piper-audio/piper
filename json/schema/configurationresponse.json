@@ -10,9 +10,12 @@
 	"outputList": {
 	    "type": "array",
 	    "items": { "$ref": "http://vamp-plugins.org/piper/json/schema/outputdescriptor#" }
-	}
+	},
+        "framing": {
+	    "$ref": "http://vamp-plugins.org/piper/json/schema/framing#"
+        }
     },
-    "required": [ "handle", "outputList" ],
+    "required": [ "handle", "outputList", "framing" ],
     "additionalProperties": false
 }
 

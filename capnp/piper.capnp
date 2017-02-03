@@ -94,6 +94,11 @@ struct FeatureSet {
     featurePairs       @0  :List(FSPair);
 }
 
+struct Framing {
+    stepSize           @0  :Int32;
+    blockSize          @1  :Int32;
+}
+
 struct Configuration {
     struct PVPair {
         parameter      @0  :Text;
@@ -102,8 +107,7 @@ struct Configuration {
     parameterValues    @0  :List(PVPair);
     currentProgram     @1  :Text;
     channelCount       @2  :Int32;
-    stepSize           @3  :Int32;
-    blockSize          @4  :Int32;
+    framing            @3  :Framing;
 }
 
 enum AdapterFlag {
@@ -146,6 +150,7 @@ struct ConfigurationRequest {
 struct ConfigurationResponse {
     handle             @0  :Int32;
     outputs            @1  :List(OutputDescriptor);
+    framing            @2  :Framing;
 }
 
 struct ProcessRequest {
