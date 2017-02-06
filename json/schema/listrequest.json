@@ -9,6 +9,5 @@
             "items": { "type": "string" }
         }
     },
-    "required": [],
     "additionalProperties": false
 }
