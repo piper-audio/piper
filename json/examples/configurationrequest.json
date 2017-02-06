@@ -1,1 +1,1 @@
-{"handle":12345,"configuration":{"blockSize": 512, "channelCount": 2, "parameterValues": {"sensitivity": 40, "threshold": 3}, "stepSize": 1024}}
+{"handle":12345,"configuration":{"framing":{"blockSize": 512,"stepSize":1024}, "channelCount": 2, "parameterValues": {"sensitivity": 40, "threshold": 3}}}
