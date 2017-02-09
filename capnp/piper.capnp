@@ -7,115 +7,119 @@ $Cxx.namespace("piper");
 struct Basic {
     # Basic metadata common to many Piper structures.
 
-    identifier         @0  :Text;
-    # A computer-readable string. Must match the regex /^[a-zA-Z0-9_-]+$/.
-
-    name               @1  :Text;
-    # A short human-readable name or label. Must be present.
-
-    description        @2  :Text;
-    # An optional human-readable descriptive text that may accompany the name.
+    identifier         @0  :Text;                 # A computer-readable string. Must match the regex /^[a-zA-Z0-9_-]+$/.
+    name               @1  :Text;                 # A short human-readable name or label. Must be present.
+    description        @2  :Text;                 # An optional human-readable descriptive text that may accompany the name.
 }
 
 struct ParameterDescriptor {
-    # Properties of an adjustable parameter. Each parameter value is just a single
+    # Properties of an adjustable parameter. A parameter's value is just a single
     # float, but the descriptor explains how to interpret and present that value.
+    # A Piper feature extractor has a static list of parameters. The properties of
+    # a given parameter never change, in contrast to output descriptors, which
+    # may have different properties depending on the configuration of the extractor.
 
-    basic              @0  :Basic;
-    # Basic metadata about the parameter.
-
-    unit               @1  :Text;
-    # Human-recognisable unit of the parameter (e.g. Hz). May be left empty.
-    
-    minValue           @2  :Float32     = 0.0;
-    # Minimum value. Must be provided.
-
-    maxValue           @3  :Float32     = 0.0;
-    # Maximum value. Must be provided.
-    
-    defaultValue       @4  :Float32     = 0.0;
-    # Default if the parameter is not set to anything else. Must be provided.
-
-    isQuantized        @5  :Bool        = false;
-    # True if parameter values are quantized to a particular resolution.
-
-    quantizeStep       @6  :Float32     = 0.0;
-    # Quantization resolution, if isQuantized.
-
-    valueNames         @7  :List(Text)  = [];
-    # Optional human-readable labels for the values, if isQuantized.
+    basic              @0  :Basic;                # Basic metadata about the parameter.
+    unit               @1  :Text;                 # Human-recognisable unit of the parameter (e.g. Hz). May be left empty.
+    minValue           @2  :Float32     = 0.0;    # Minimum value. Must be provided.
+    maxValue           @3  :Float32     = 0.0;    # Maximum value. Must be provided.
+    defaultValue       @4  :Float32     = 0.0;    # Default if the parameter is not set to anything else. Must be provided.
+    isQuantized        @5  :Bool        = false;  # True if parameter values are quantized to a particular resolution.
+    quantizeStep       @6  :Float32     = 0.0;    # Quantization resolution, if isQuantized.
+    valueNames         @7  :List(Text)  = [];     # Optional human-readable labels for the values, if isQuantized.
 }
 
 enum SampleType {
     # How returned features are spaced on the input timeline.
 
-    oneSamplePerStep   @0;
-    # Each process input returns a feature aligned with that input's timestamp.
-
-    fixedSampleRate    @1;
-    # Features are equally spaced at a given sample rate.
-    
-    variableSampleRate @2;
-    # Features have their own individual timestamps.
+    oneSamplePerStep   @0;                        # Each process input returns a feature aligned with that input's timestamp.
+    fixedSampleRate    @1;                        # Features are equally spaced at a given sample rate.
+    variableSampleRate @2;                        # Features have their own individual timestamps.
 }
 
 struct ConfiguredOutputDescriptor {
-    unit               @0  :Text;
-    hasFixedBinCount   @1  :Bool        = false;
-    binCount           @2  :Int32       = 0;
-    binNames           @3  :List(Text)  = [];
-    hasKnownExtents    @4  :Bool        = false;
-    minValue           @5  :Float32     = 0.0;
-    maxValue           @6  :Float32     = 0.0;
-    isQuantized        @7  :Bool        = false;
-    quantizeStep       @8  :Float32     = 0.0;
-    sampleType         @9  :SampleType;
-    sampleRate         @10 :Float32     = 0.0;
-    hasDuration        @11 :Bool        = false;
+    # Properties of an output, that is, a single stream of features produced
+    # in response to process and finish requests. A feature extractor may
+    # have any number of outputs, and it always calculates and returns features
+    # from all of them when processing; this is useful in cases where more
+    # than one feature can be easily calculated using a single method.
+    # This structure contains the properties of an output that are not static,
+    # i.e. that may depend on the parameter values provided at configuration.
+
+    unit               @0  :Text;                 # Human-recognisable unit of the bin values in output features. May be empty.
+    hasFixedBinCount   @1  :Bool        = false;  # True if this output has an equal number of values in each returned feature.
+    binCount           @2  :Int32       = 0;      # Number of values per feature for this output, if hasFixedBinCount.
+    binNames           @3  :List(Text)  = [];     # Optional human-readable labels for the value bins, if hasFixedBinCount.
+    hasKnownExtents    @4  :Bool        = false;  # True if all feature values fall within the same fixed min/max range.
+    minValue           @5  :Float32     = 0.0;    # Minimum value in range for any value from this output, if hasKnownExtents.
+    maxValue           @6  :Float32     = 0.0;    # Maximum value in range for any value from this output, if hasKnownExtents.
+    isQuantized        @7  :Bool        = false;  # True if feature values are quantized to a particular resolution.
+    quantizeStep       @8  :Float32     = 0.0;    # Quantization resolution, if isQuantized.
+    sampleType         @9  :SampleType;           # How returned features from this output are spaced on the input timeline.
+    sampleRate         @10 :Float32     = 0.0;    # Sample rate (features per second) if sampleType == fixedSampleRate.
+    hasDuration        @11 :Bool        = false;  # True if features returned from this output will have a duration.
 }
 
 struct OutputDescriptor {
-    basic              @0  :Basic;
-    configured         @1  :ConfiguredOutputDescriptor;
+    # All the properties of an output, both static (the basic metadata) and
+    # potentially dependent on configuration parameters (the configured descriptor).
+
+    basic              @0  :Basic;                # Basic metadata about the output.
+    configured         @1  :ConfiguredOutputDescriptor;    # Properties of the output that may depend on configuration parameters.
 }
 
 enum InputDomain {
-    timeDomain         @0;
-    frequencyDomain    @1;
+    # Whether a feature extractor requires time-domain audio input (i.e.
+    # "normal" or "unprocessed" audio samples) or frequency-domain input
+    # (i.e. resulting from windowed, usually overlapping, short-time
+    # Fourier transforms).
+
+    timeDomain         @0;                        # The plugin requires time-domain audio samples as input.
+    frequencyDomain    @1;                        # The plugin requires input to have been pre-processed using windowed STFTs.
 }
 
 struct ExtractorStaticData {
-    key                @0  :Text;
-    basic              @1  :Basic;
-    maker              @2  :Text;
-    copyright          @3  :Text;
-    version            @4  :Int32;
-    category           @5  :List(Text);
-    minChannelCount    @6  :Int32;
-    maxChannelCount    @7  :Int32;
-    parameters         @8  :List(ParameterDescriptor);
-    programs           @9  :List(Text);
-    inputDomain        @10 :InputDomain;
-    basicOutputInfo    @11 :List(Basic);
+    # Static properties of a feature extractor. That is, metadata about the
+    # extractor that are the same regardless of how you configure or run it.
+
+    key                @0  :Text;                 # Composed string that identifies the extractor among all extractors (see docs).
+    basic              @1  :Basic;                # Basic metadata about the extractor.
+    maker              @2  :Text;                 # Human-readable text naming the author or vendor of the extractor.
+    copyright          @3  :Text;                 # ??? review
+    version            @4  :Int32;                # Version number of extractor; must increase if new algorithm changes outputs.
+    category           @5  :List(Text);           # ??? review
+    minChannelCount    @6  :Int32;                # Minimum number of input channels of audio this extractor can accept.
+    maxChannelCount    @7  :Int32;                # Maximum number of input channels of audio this extractor can accept.
+    parameters         @8  :List(ParameterDescriptor);    # List of configurable parameter properties for the feature extractor.
+    programs           @9  :List(Text);           # ??? review
+    inputDomain        @10 :InputDomain;          # Whether the extractor requires time-domain or frequency-domain input audio.
+    basicOutputInfo    @11 :List(Basic);          # Basic metadata about all of the outputs of the extractor.
 }
 
 struct RealTime {
-    sec                @0  :Int32       = 0;
-    nsec               @1  :Int32       = 0;
+    # Time structure. When used as a timestamp, this is relative to "start
+    # of audio".
+    
+    sec                @0  :Int32       = 0;      # Number of seconds.
+    nsec               @1  :Int32       = 0;      # Number of nanoseconds. Must have same sign as sec unless sec == 0.
 }
 
 struct ProcessInput {
-    inputBuffers       @0  :List(List(Float32));
-    timestamp          @1  :RealTime;
+    # Audio and timing input data provided to a process request.
+
+    inputBuffers       @0  :List(List(Float32));  # For each input channel, a single block of audio data (time or frequency domain).
+    timestamp          @1  :RealTime;             # Time of start of input block (time-domain) or "centre" of it (frequency-domain).
 }
 
 struct Feature {
-    hasTimestamp       @0  :Bool        = false;
-    timestamp          @1  :RealTime;
-    hasDuration        @2  :Bool        = false;
-    duration           @3  :RealTime;
-    label              @4  :Text;
-    featureValues      @5  :List(Float32) = [];
+    # A single feature calculated and returned from a process or finish request.
+
+    hasTimestamp       @0  :Bool        = false;  # True if feature has a timestamp. Must be true if on a variableSampleRate output.
+    timestamp          @1  :RealTime;             # Timestamp of feature, if hasTimestamp.
+    hasDuration        @2  :Bool        = false;  # True if feature has a duration. Must be true if output's hasDuration is true.
+    duration           @3  :RealTime;             # Duration of feature, if hasDuration.
+    label              @4  :Text;                 # Optional human-readable text attached to feature.
+    featureValues      @5  :List(Float32) = [];   # The feature values themselves (of size binCount, if output hasFixedBinCount).
 }
 
 struct FeatureSet {
