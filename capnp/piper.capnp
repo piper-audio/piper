@@ -5,26 +5,58 @@ using Cxx = import "/capnp/c++.capnp";
 $Cxx.namespace("piper");
 
 struct Basic {
+    # Basic metadata common to many Piper structures.
+
     identifier         @0  :Text;
+    # A computer-readable string. Must match the regex /^[a-zA-Z0-9_-]+$/.
+
     name               @1  :Text;
+    # A short human-readable name or label. Must be present.
+
     description        @2  :Text;
+    # An optional human-readable descriptive text that may accompany the name.
 }
 
 struct ParameterDescriptor {
+    # Properties of an adjustable parameter. Each parameter value is just a single
+    # float, but the descriptor explains how to interpret and present that value.
+
     basic              @0  :Basic;
+    # Basic metadata about the parameter.
+
     unit               @1  :Text;
+    # Human-recognisable unit of the parameter (e.g. Hz). May be left empty.
+    
     minValue           @2  :Float32     = 0.0;
+    # Minimum value. Must be provided.
+
     maxValue           @3  :Float32     = 0.0;
+    # Maximum value. Must be provided.
+    
     defaultValue       @4  :Float32     = 0.0;
+    # Default if the parameter is not set to anything else. Must be provided.
+
     isQuantized        @5  :Bool        = false;
+    # True if parameter values are quantized to a particular resolution.
+
     quantizeStep       @6  :Float32     = 0.0;
+    # Quantization resolution, if isQuantized.
+
     valueNames         @7  :List(Text)  = [];
+    # Optional human-readable labels for the values, if isQuantized.
 }
 
 enum SampleType {
+    # How returned features are spaced on the input timeline.
+
     oneSamplePerStep   @0;
+    # Each process input returns a feature aligned with that input's timestamp.
+
     fixedSampleRate    @1;
+    # Features are equally spaced at a given sample rate.
+    
     variableSampleRate @2;
+    # Features have their own individual timestamps.
 }
 
 struct ConfiguredOutputDescriptor {
