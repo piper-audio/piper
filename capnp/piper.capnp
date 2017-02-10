@@ -93,9 +93,9 @@ struct ExtractorStaticData {
     key                @0  :Text;                 # Composed string that identifies the extractor among all extractors (see docs).
     basic              @1  :Basic;                # Basic metadata about the extractor.
     maker              @2  :Text;                 # Human-readable text naming the author or vendor of the extractor.
-    copyright          @3  :Text;                 # ??? review
+    copyright          @3  :Text;                 # ???name + review
     version            @4  :Int32;                # Version number of extractor; must increase if new algorithm changes outputs.
-    category           @5  :List(Text);           # ??? review
+    category           @5  :List(Text);           # ???name + review
     minChannelCount    @6  :Int32;                # Minimum number of input channels of audio this extractor can accept.
     maxChannelCount    @7  :Int32;                # Maximum number of input channels of audio this extractor can accept.
     parameters         @8  :List(ParameterDescriptor);    # List of configurable parameter properties for the feature extractor.
@@ -146,16 +146,16 @@ struct FeatureSet {
 }
 
 struct Framing {
-    # Determines how audio should be split up into frames (blocks, chunks,
-    # buffers, etc) for input. If the feature extractor accepts frequency-domain
-    # input, then this framing applies prior to the STFT transform.
+    # Determines how audio should be split up into individual buffers for input.
+    # If the feature extractor accepts frequency-domain input, then this
+    # applies prior to the STFT transform.
     #
     # These values are sometimes mandatory, but in other contexts one or both may
     # be set to zero to mean "don't care". See documentation for structures that
     # include a framing field for details.
     
-    blockSize          @0  :Int32;                # Number of time-domain audio samples per frame (on each channel).
-    stepSize           @1  :Int32;                # Number of samples to advance between frames: equals blockSize for no overlap.
+    blockSize          @0  :Int32;                # Number of time-domain audio samples per buffer (on each channel).
+    stepSize           @1  :Int32;                # Number of samples to advance between buffers: equals blockSize for no overlap.
 }
 
 struct Configuration {
@@ -176,108 +176,157 @@ struct Configuration {
 }
 
 enum AdapterFlag {
-    adaptInputDomain   @0;
-    adaptChannelCount  @1;
-    adaptBufferSize    @2;
+    # Flags that may be used when requesting a server to load a feature
+    # extractor, to ask the server to do some of the work of framing and input
+    # conversion instead of leaving it to the client side. These affect the
+    # apparent behaviour of the loaded extractor.
+
+    adaptInputDomain   @0;                        # Input-domain conversion, so the extractor always expects time-domain input.
+    adaptChannelCount  @1;                        # Channel mixing or duplication, so any number of input channels is acceptable. 
+    adaptBufferSize    @2;                        # Framing, so the extractor accepts any blockSize of non-overlapping buffers.
 }
 
 const adaptAllSafe :List(AdapterFlag) =
-      [ adaptInputDomain, adaptChannelCount ];
+    [ adaptInputDomain, adaptChannelCount ];
+    # The set of adapter flags that can always be applied, leaving results unchanged.
 
 const adaptAll :List(AdapterFlag) =
-      [ adaptInputDomain, adaptChannelCount, adaptBufferSize ];
+    [ adaptInputDomain, adaptChannelCount, adaptBufferSize ];
+    # The set of adapter flags that may cause "equivalent" results to be returned (see documentation).
 
 struct ListRequest {
-    from               @0  :List(Text);
+    # Request a server to provide a list of available feature extractors.
+    
+    from               @0  :List(Text);           # If non-empty, provide only extractors found in the given list of "libraries".
 }
 
 struct ListResponse {
-    available          @0  :List(ExtractorStaticData);    
+    # Response to a successful list request.
+    
+    available          @0  :List(ExtractorStaticData);    # List of static data about available feature extractors.
 }
 
 struct LoadRequest {
-    key                @0  :Text;
-    inputSampleRate    @1  :Float32;
-    adapterFlags       @2  :List(AdapterFlag);
+    # Request a server to load a feature extractor and return a handle to it.
+    
+    key                @0  :Text;                 # Key as found in the extractor's static data structure.
+    inputSampleRate    @1  :Float32;              # Sample rate for input audio. Properties of the extractor may depend on this.
+    adapterFlags       @2  :List(AdapterFlag);    # Set of optional flags to make any framing and input conversion requests.
 }
 
 struct LoadResponse {
-    handle             @0  :Int32;
-    staticData         @1  :ExtractorStaticData;
-    defaultConfiguration @2  :Configuration;
+    # Response to a successful load request.
+    
+    handle             @0  :Int32;                # Handle to be used to refer to the loaded feature extractor in future requests.
+    staticData         @1  :ExtractorStaticData;  # Static data about this feature extractor, identical to that in list response.
+    defaultConfiguration @2  :Configuration;      # Extractor's default parameter values and preferred input framing.
 }
 
 struct ConfigurationRequest {
-    handle             @0  :Int32;
-    configuration      @1  :Configuration;
+    # Request a server to configure a loaded feature extractor and prepare
+    # it for use. This request must be carried out on a feature extractor
+    # before any process request can be made.
+    
+    handle             @0  :Int32;                # Handle as returned in the load response from the loading of this extractor.
+    configuration      @1  :Configuration;        # Bundle of parameter values to set, and client's preferred input framing.
 }
 
 struct ConfigurationResponse {
-    handle             @0  :Int32;
-    outputs            @1  :List(OutputDescriptor);
-    framing            @2  :Framing;
+    # Response to a successful configuration request.
+
+    handle             @0  :Int32;                # Handle of extractor, as passed in the configuration request.
+    outputs            @1  :List(OutputDescriptor);       # Full set of properties of all outputs following configuration.
+    framing            @2  :Framing;              # Input framing that must be used for subsequent process requests.
 }
 
 struct ProcessRequest {
-    handle             @0  :Int32;
-    processInput       @1  :ProcessInput;
+    # Request a server to process a buffer of audio using a loaded and
+    # configured feature extractor.
+
+    handle             @0  :Int32;                # Handle as returned in the load response from the loading of this extractor.
+    processInput       @1  :ProcessInput;         # Audio in the input domain, with framing as in the configuration response.
 }
 
 struct ProcessResponse {
-    handle             @0  :Int32;
-    features           @1  :FeatureSet;
+    # Response to a successful process request.
+
+    handle             @0  :Int32;                # Handle of extractor, as passed in the process request.
+    features           @1  :FeatureSet;           # All features across all outputs calculated during this process request.
 }
 
 struct FinishRequest {
-    handle             @0  :Int32;
+    # Request a server to finish processing and unload a loaded feature
+    # extractor. This request may be made at any time -- the extractor does
+    # not have to have been configured or used. The extractor handle cannot
+    # be used again with this server afterwards.
+
+    handle             @0  :Int32;                # Handle as returned in the load response from the loading of this extractor.
 }
 
 struct FinishResponse {
-    handle             @0  :Int32;
-    features           @1  :FeatureSet;
+    # Response to a successful finish request.
+
+    handle             @0  :Int32;                # Handle of extractor, as passed in the finish request. May not be used again.
+    features           @1  :FeatureSet;           # Features the extractor has calculated now that it knows all input has ended.
 }
 
 struct Error {
-    code               @0  :Int32;
-    message            @1  :Text;
+    # Response to any request that fails.
+
+    code               @0  :Int32;                # Error code. 
+    message            @1  :Text;                 # Error message.
 }
 
 struct RpcRequest {
     # Request bundle for use when using Cap'n Proto serialisation without
     # Cap'n Proto RPC layer. For Cap'n Proto RPC, see piper.rpc.capnp.
+
     id :union {
+        # Identifier used solely to associate a response packet with its
+	# originating request. Server does not examine the contents of this,
+	# it just copies the request id into the response.
+	
         number         @0  :Int32;
         tag            @1  :Text;
         none           @2  :Void;
     }
+    
     request :union {
-	list           @3  :ListRequest;
-	load           @4  :LoadRequest;
-	configure      @5  :ConfigurationRequest;
-	process        @6  :ProcessRequest;
-	finish         @7  :FinishRequest;
-        # finish gets any remaining calculated features and unloads
-        # the feature extractor. Note that you can call finish at any
-        # time -- even if you haven't configured or used the extractor,
-        # it will unload any resources used and abandon the handle.
+        # For more details, see the documentation for the individual
+	# request structures.
+	
+	list           @3  :ListRequest;          # Provide a list of available feature extractors.
+	load           @4  :LoadRequest;          # Load a feature extractor and return a handle to it.
+	configure      @5  :ConfigurationRequest; # Configure a loaded feature extractor, set parameters, and prepare it for use.
+	process        @6  :ProcessRequest;       # Process a single fixed-size buffer of audio and return calculated features.
+	finish         @7  :FinishRequest;        # Get any remaining features and unload the extractor.
     }
 }
 
 struct RpcResponse {
     # Response bundle for use when using Cap'n Proto serialisation without
     # Cap'n Proto RPC layer. For Cap'n Proto RPC, see piper.rpc.capnp.
+
     id :union {
+        # Identifier used solely to associate a response packet with its
+	# originating request. Server does not examine the contents of this,
+	# it just copies the request id into the response.
+	
         number         @0  :Int32;
         tag            @1  :Text;
         none           @2  :Void;
     }
+
     response :union {
-        error          @3  :Error;
-	list           @4  :ListResponse;
-	load           @5  :LoadResponse;
-	configure      @6  :ConfigurationResponse;
-	process        @7  :ProcessResponse;
-	finish         @8  :FinishResponse;
+        # For more details, see the documentation for the individual
+	# response structures.
+	
+        error          @3  :Error;                # The request (of whatever type) failed.
+	list           @4  :ListResponse;         # List succeeded, here is static data about the requested extractors.
+	load           @5  :LoadResponse;         # Load succeeded, here is a handle for the loaded extractor.
+	configure      @6  :ConfigurationResponse;# Configure succeeded, ready to process, here are values such as block size.
+	process        @7  :ProcessResponse;      # Process succeeded, here are all features calculated from this input block.
+	finish         @8  :FinishResponse;       # Finish succeeded, extractor unloaded, here are all remaining features.
     }
 }
 
