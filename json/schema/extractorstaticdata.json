@@ -13,7 +13,7 @@
 	"maker": {
 	    "type": "string"
 	},
-	"copyright": {
+	"rights": {
 	    "type": "string"
 	},
 	"version": {

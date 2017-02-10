@@ -90,12 +90,12 @@ struct ExtractorStaticData {
     # Static properties of a feature extractor. That is, metadata about the
     # extractor that are the same regardless of how you configure or run it.
 
-    key                @0  :Text;                 # Composed string that identifies the extractor among all extractors (see docs).
+    key                @0  :Text;                 # String that "globally" identifies the extractor, used to load it (see docs).
     basic              @1  :Basic;                # Basic metadata about the extractor.
     maker              @2  :Text;                 # Human-readable text naming the author or vendor of the extractor.
-    copyright          @3  :Text;                 # ???name + review
-    version            @4  :Int32;                # Version number of extractor; must increase if new algorithm changes outputs.
-    category           @5  :List(Text);           # ???name + review
+    rights             @3  :Text;                 # Human-readable summary of copyright and/or licensing terms for the extractor.
+    version            @4  :Int32;                # Version number of extractor; must increase if new algorithm changes results.
+    category           @5  :List(Text);           # List of general->specific category labels for this extractor (see docs).
     minChannelCount    @6  :Int32;                # Minimum number of input channels of audio this extractor can accept.
     maxChannelCount    @7  :Int32;                # Maximum number of input channels of audio this extractor can accept.
     parameters         @8  :List(ParameterDescriptor);    # List of configurable parameter properties for the feature extractor.
