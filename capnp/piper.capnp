@@ -1,4 +1,12 @@
 
+# Piper audio feature extraction: schema for low-level operation
+#
+# This file is formatted to 130 characters width, in order to fit the
+# comments next to the schema definitions.
+#
+# Copyright (c) 2015-2017 Queen Mary, University of London, provided
+# under a BSD-style licence. See the file COPYING for details.
+
 @0xc4b1c6c44c999206;
 
 using Cxx = import "/capnp/c++.capnp";
@@ -91,7 +99,7 @@ struct ExtractorStaticData {
     minChannelCount    @6  :Int32;                # Minimum number of input channels of audio this extractor can accept.
     maxChannelCount    @7  :Int32;                # Maximum number of input channels of audio this extractor can accept.
     parameters         @8  :List(ParameterDescriptor);    # List of configurable parameter properties for the feature extractor.
-    programs           @9  :List(Text);           # ??? review
+    programs           @9  :List(Text);           # List of predefined programs. For backward-compatibility, not recommended.
     inputDomain        @10 :InputDomain;          # Whether the extractor requires time-domain or frequency-domain input audio.
     basicOutputInfo    @11 :List(Basic);          # Basic metadata about all of the outputs of the extractor.
 }
@@ -107,14 +115,14 @@ struct RealTime {
 struct ProcessInput {
     # Audio and timing input data provided to a process request.
 
-    inputBuffers       @0  :List(List(Float32));  # For each input channel, a single block of audio data (time or frequency domain).
-    timestamp          @1  :RealTime;             # Time of start of input block (time-domain) or "centre" of it (frequency-domain).
+    inputBuffers       @0  :List(List(Float32));  # A single block of audio data (time or frequency domain) for each channel.
+    timestamp          @1  :RealTime;             # Time of start of block (time-domain) or "centre" of it (frequency-domain).
 }
 
 struct Feature {
     # A single feature calculated and returned from a process or finish request.
 
-    hasTimestamp       @0  :Bool        = false;  # True if feature has a timestamp. Must be true if on a variableSampleRate output.
+    hasTimestamp       @0  :Bool        = false;  # True if feature has a timestamp. Must be true for a variableSampleRate output.
     timestamp          @1  :RealTime;             # Timestamp of feature, if hasTimestamp.
     hasDuration        @2  :Bool        = false;  # True if feature has a duration. Must be true if output's hasDuration is true.
     duration           @3  :RealTime;             # Duration of feature, if hasDuration.
@@ -123,27 +131,48 @@ struct Feature {
 }
 
 struct FeatureSet {
+    # The set of all features, across all outputs, calculated and returned from
+    # a single process or finish request.
+
     struct FSPair {
-        output         @0  :Text;
-        features       @1  :List(Feature) = [];
+        # A mapping between output identifier and ordered list of features for
+	# that output.
+	
+        output         @0  :Text;                 # Output id, matching the output's descriptor's basic identifier.
+        features       @1  :List(Feature) = [];   # Features calculated for that output during the current request, in time order.
     }
-    featurePairs       @0  :List(FSPair);
+    
+    featurePairs       @0  :List(FSPair);         # The feature lists for all outputs for which any features have been calculated.
 }
 
 struct Framing {
-    stepSize           @0  :Int32;
-    blockSize          @1  :Int32;
+    # Determines how audio should be split up into frames (blocks, chunks,
+    # buffers, etc) for input. If the feature extractor accepts frequency-domain
+    # input, then this framing applies prior to the STFT transform.
+    #
+    # These values are sometimes mandatory, but in other contexts one or both may
+    # be set to zero to mean "don't care". See documentation for structures that
+    # include a framing field for details.
+    
+    blockSize          @0  :Int32;                # Number of time-domain audio samples per frame (on each channel).
+    stepSize           @1  :Int32;                # Number of samples to advance between frames: equals blockSize for no overlap.
 }
 
 struct Configuration {
+    # Bundle of parameter values and other configuration data for a feature-
+    # extraction procedure.
+
     struct PVPair {
-        parameter      @0  :Text;
-        value          @1  :Float32;
+        # A mapping between parameter identifier and value.
+	
+        parameter      @0  :Text;                 # Parameter id, matching the parameter's descriptor's basic identifier.
+        value          @1  :Float32;              # Value to set parameter to (within constraints given in parameter descriptor).
     }
-    parameterValues    @0  :List(PVPair);
-    currentProgram     @1  :Text;
-    channelCount       @2  :Int32;
-    framing            @3  :Framing;
+    
+    parameterValues    @0  :List(PVPair);         # Values for all parameters, or at least any that are to change from defaults.
+    currentProgram     @1  :Text;                 # Selection of predefined program. For backward-compatibility, not recommended. 
+    channelCount       @2  :Int32;                # Number of audio channels of input.
+    framing            @3  :Framing;              # Step and block size for framing the input.
 }
 
 enum AdapterFlag {
