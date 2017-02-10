@@ -284,7 +284,7 @@ struct RpcRequest {
     id :union {
         # Identifier used solely to associate a response packet with its
 	# originating request. Server does not examine the contents of this,
-	# it just copies the request id into the response.
+	# it just copies the request id structure into the response.
 	
         number         @0  :Int32;
         tag            @1  :Text;
@@ -310,7 +310,7 @@ struct RpcResponse {
     id :union {
         # Identifier used solely to associate a response packet with its
 	# originating request. Server does not examine the contents of this,
-	# it just copies the request id into the response.
+	# it just copies the request id structure into the response.
 	
         number         @0  :Int32;
         tag            @1  :Text;
@@ -322,11 +322,11 @@ struct RpcResponse {
 	# response structures.
 	
         error          @3  :Error;                # The request (of whatever type) failed.
-	list           @4  :ListResponse;         # List succeeded, here is static data about the requested extractors.
-	load           @5  :LoadResponse;         # Load succeeded, here is a handle for the loaded extractor.
-	configure      @6  :ConfigurationResponse;# Configure succeeded, ready to process, here are values such as block size.
-	process        @7  :ProcessResponse;      # Process succeeded, here are all features calculated from this input block.
-	finish         @8  :FinishResponse;       # Finish succeeded, extractor unloaded, here are all remaining features.
+	list           @4  :ListResponse;         # List succeeded: here is static data about the requested extractors.
+	load           @5  :LoadResponse;         # Load succeeded: here is a handle for the loaded extractor.
+	configure      @6  :ConfigurationResponse;# Configure succeeded: ready to process, here are values such as block size.
+	process        @7  :ProcessResponse;      # Process succeeded: here are all features calculated from this input block.
+	finish         @8  :FinishResponse;       # Finish succeeded: extractor unloaded, here are all remaining features.
     }
 }
 
