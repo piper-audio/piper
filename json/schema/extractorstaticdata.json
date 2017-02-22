@@ -1,5 +1,5 @@
 {
-    "id": "http://vamp-plugins.org/piper/json/schema/pluginstaticdata#",
+    "id": "http://vamp-plugins.org/piper/json/schema/extractorstaticdata#",
     "$schema": "http://json-schema.org/draft-04/schema#",
     "description": "schema for the static metadata associated with a feature extractor",
     "type": "object",
