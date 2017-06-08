@@ -45,6 +45,26 @@ enum SampleType {
     variableSampleRate @2;                        # Features have their own individual timestamps.
 }
 
+struct StaticOutputDescriptor {
+
+    # Properties of an output, that is, a single stream of features
+    # produced in response to process and finish requests. A feature
+    # extractor may have any number of outputs, and it always
+    # calculates and returns features from all of them when
+    # processing; this is useful in cases where more than one feature
+    # can be easily calculated using a single method.
+    # 
+    # This structure contains the properties of an output that are
+    # static, i.e. that do not depend on the parameter values provided
+    # at configuration, excluding the Basic struct parameters like id
+    # and description.  The Basic struct properties are not included
+    # for historical reasons: they were already referenced separately
+    # in the OutputDescriptor and ExtractorStaticData before this
+    # struct was introduced.
+    
+    typeURI            @0  :Text;                 # URI indicating the sort of feature that this output returns (see docs).
+}
+
 struct ConfiguredOutputDescriptor {
     # Properties of an output, that is, a single stream of features produced
     # in response to process and finish requests. A feature extractor may
@@ -69,11 +89,13 @@ struct ConfiguredOutputDescriptor {
 }
 
 struct OutputDescriptor {
-    # All the properties of an output, both static (the basic metadata) and
-    # potentially dependent on configuration parameters (the configured descriptor).
+    # All the properties of an output, both static (the basic metadata and static
+    # descriptor) and potentially dependent on configuration parameters (the
+    # configured descriptor).
 
     basic              @0  :Basic;                # Basic metadata about the output.
     configured         @1  :ConfiguredOutputDescriptor;    # Properties of the output that may depend on configuration parameters.
+    static             @2  :StaticOutputDescriptor;        # Properties (other than Basic) that do not depend on parameters.
 }
 
 enum InputDomain {
@@ -102,6 +124,16 @@ struct ExtractorStaticData {
     programs           @9  :List(Text);           # List of predefined programs. For backward-compatibility, not recommended.
     inputDomain        @10 :InputDomain;          # Whether the extractor requires time-domain or frequency-domain input audio.
     basicOutputInfo    @11 :List(Basic);          # Basic metadata about all of the outputs of the extractor.
+
+    struct SOPair {
+        # A mapping between output identifier and static descriptor for
+	# that output.
+	
+        output         @0  :Text;                 # Output id, matching the output's descriptor's basic identifier.
+        static         @1  :StaticOutputDescriptor;
+    }
+
+    staticOutputInfo   @12 :List(SOPair);         # Static descriptors for all outputs that have any static metadata.
 }
 
 struct RealTime {
