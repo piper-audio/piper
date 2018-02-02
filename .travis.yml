@@ -17,7 +17,7 @@ before_install:
   - ( cd ../capnproto/c++ ; ./configure && make && sudo make install )
 
 install:
-  - sudo pip install jsonschema
+  - sudo pip2 install jsonschema
 
 script:
   - ./check.sh
