@@ -13,6 +13,7 @@ os:
 
 before_install:
   - ( cd ../ ; git clone https://github.com/sandstorm-io/capnproto )
+  - ( cd ../capnproto ; git checkout v0.6.1 )
   - ( cd ../capnproto/c++ ; ./setup-autotools.sh && autoreconf -i )
   - ( cd ../capnproto/c++ ; ./configure && make && sudo make install )
 
