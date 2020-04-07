@@ -12,7 +12,20 @@
 	},
 	"defaultConfiguration": {
 	    "$ref": "http://vamp-plugins.org/piper/json/schema/configuration#"
-	}
+	},
+        "programParameters": {
+            "type": "object",
+            "patternProperties": {
+		"^[a-zA-Z0-9_-]+$": {
+	            "type": "object",
+	            "patternProperties": {
+		        "^[a-zA-Z0-9_-]+$": {
+		            "type": "number"
+		        }
+                    }
+                }
+            }
+        }
     },
     "required": [ "handle", "staticData", "defaultConfiguration" ],
     "additionalProperties": false

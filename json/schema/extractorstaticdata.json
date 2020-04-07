@@ -37,19 +37,6 @@
 	    "type": "array",
 	    "items": { "type": "string" }
 	},
-        "programParameters": {
-            "type": "object",
-            "patternProperties": {
-		"^[a-zA-Z0-9_-]+$": {
-	            "type": "object",
-	            "patternProperties": {
-		        "^[a-zA-Z0-9_-]+$": {
-		            "type": "number"
-		        }
-                    }
-                }
-            }
-        },
 	"inputDomain": {
 	    "$ref": "http://vamp-plugins.org/piper/json/schema/enums#/definitions/input_domain"
 	},
