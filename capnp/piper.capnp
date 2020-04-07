@@ -121,7 +121,7 @@ struct ExtractorStaticData {
     minChannelCount    @6  :Int32;                # Minimum number of input channels of audio this extractor can accept.
     maxChannelCount    @7  :Int32;                # Maximum number of input channels of audio this extractor can accept.
     parameters         @8  :List(ParameterDescriptor);    # List of configurable parameter properties for the feature extractor.
-    programs           @9  :List(Text);           # List of predefined programs. For backward-compatibility, not recommended.
+    programs           @9  :List(Text);           # List of predefined programs.
     inputDomain        @10 :InputDomain;          # Whether the extractor requires time-domain or frequency-domain input audio.
     basicOutputInfo    @11 :List(Basic);          # Basic metadata about all of the outputs of the extractor.
 
@@ -252,6 +252,16 @@ struct LoadResponse {
     handle             @0  :Int32;                # Handle to be used to refer to the loaded feature extractor in future requests.
     staticData         @1  :ExtractorStaticData;  # Static data about this feature extractor, identical to that in list response.
     defaultConfiguration @2  :Configuration;      # Extractor's default parameter values and preferred input framing.
+
+    struct PPPair {
+        # A mapping between program name and parameter values for that program.
+
+        program        @0  :Text;                 # Program name, one of those listed in the static data.
+        parameters     @1  :List(Configuration.PVPair);
+                                                  # Parameter values for all parameters changed from defaults by that program setting.
+    }
+
+    programParameters  @3  :List(PPPair);
 }
 
 struct ConfigurationRequest {
