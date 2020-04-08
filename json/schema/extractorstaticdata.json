@@ -50,7 +50,8 @@
                 "^[a-zA-Z0-9_-]+$": {
                     "$ref": "http://vamp-plugins.org/piper/json/schema/staticoutputdescriptor#"
                 }
-            }
+            },
+            "additionalProperties": false
         }
     },
     "required": [ "key", "basic", "version",

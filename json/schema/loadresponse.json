@@ -15,15 +15,14 @@
 	},
         "programParameters": {
             "type": "object",
-            "patternProperties": {
-		"^[a-zA-Z0-9_-]+$": {
-	            "type": "object",
-	            "patternProperties": {
-		        "^[a-zA-Z0-9_-]+$": {
-		            "type": "number"
-		        }
+            "additionalProperties": {
+	        "type": "object",
+	        "patternProperties": {
+		    "^[a-zA-Z0-9_-]+$": {
+		        "type": "number"
                     }
-                }
+                },
+                "additionalProperties": false
             }
         }
     },
